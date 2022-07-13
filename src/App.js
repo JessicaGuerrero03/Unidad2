@@ -1,17 +1,39 @@
 import { useEffect, useState } from 'react'
 import React from 'react'
 import PokemonThumb from './componente/pokemons.jsx'
+import axios from 'axios'
 
 const App = () => {
+  
+  const[allPokemons, setAllPokemons] = useState([])
+  const [url, setUrl] = useState(' https://pokeapi.co/api/v2/pokemon?limit=20&offset=0')
+  const [nextUrl, setNextUrl] = useState();
+  const [prevUrl, setPrevUrl] = useState();
+  const [disable, setDisable] = React.useState(true)
 
-   const[allPokemons, setAllPokemons] = useState([])
-   const [loadMore, setLoadMore] = useState(' https://pokeapi.co/api/v2/pokemon?limit=20&offset=0')
+  const pokeFunc = async() => {
+    const res = await axios.get(url);
+
+    setNextUrl(res.data.next);
+    setPrevUrl(res.data.previous);
+    getAllPokemons(res.data.results);
+   
+
+    console.log("PREV", res.data.previous);
+    console.log("NEXT", res.data.next);
+
+    if (res.data.previous != null) {
+        setDisable(false);
+    } else {
+        setDisable(true);
+    }
+}
 
   const getAllPokemons = async () => {
-    const res = await fetch(loadMore)
+    const res = await fetch(url)
     const data = await res.json()
 
-    setLoadMore(data.next)
+    setUrl(data.next)
 
     function createPokemonObject(results)  {
       results.forEach( async pokemon => {
@@ -25,8 +47,8 @@ const App = () => {
   }
 
  useEffect(() => {
-  getAllPokemons()
- }, [])
+  pokeFunc()
+ }, [url])
 
   return (
     <div className="app-contaner">
@@ -43,7 +65,16 @@ const App = () => {
             />)}
           
         </div>
-          <button className="load-more" onClick={() => getAllPokemons()}>Load more</button>
+        <div className="btn-div">
+                    <button type="button" disabled={disable} className="button" onClick={()=> {
+                        setAllPokemons([])
+                        setUrl(prevUrl)
+                    }}>Previous</button>&nbsp;&nbsp;
+                    <button type="button" className="button" onClick={()=>{
+                        setAllPokemons([])
+                        setUrl(nextUrl)
+                    }}>Next</button>&nbsp;&nbsp;
+                </div>
       </div>
     </div>
   );

@@ -15,10 +15,8 @@ ReactDOM.render(
     <Route path = '/'element = { < Layout / > } >
     <Route path = 'pokemons'element = { <App / >}/>
     <Route path = 'pokemonInfo'element = { < PokemonInfo / > }/ > 
-    <Route path = 'datos'
-    element = { < AlumnInfo / > }/ > 
-    <Route path = '*'element = { < Navigate replace to = '/' / > }/ > 
-    </Route > 
+    <Route path = 'datos'element = { < AlumnInfo />} />
+    </Route >
     </Routes >
     </BrowserRouter > ,
     document.getElementById('root')

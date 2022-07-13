@@ -43,7 +43,7 @@ const PokemonInfo = () => {
             />)}
           
         </div>
-          <button className="load-more" onClick={() => getAllPokemons()}>Load more</button>
+          <button className="load-more" onClick={() => getAllPokemons()}>View more</button>
       </div>
     </div>
   );
